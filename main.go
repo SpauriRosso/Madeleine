@@ -1,6 +1,7 @@
 package main
 
-func main() {
-	// https://api.naga.ac/docs --> NagaAI DOC
+import "Madeleine/src/utils"
 
+func main() {
+	utils.BotRun()
 }
