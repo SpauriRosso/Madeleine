@@ -4,30 +4,20 @@ import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 	"os"
 	"os/signal"
-	"strings"
+	"strconv"
 	"syscall"
 )
 
 func BotRun() {
 	BotToken := GetEnv("APP_USER_TOKEN")
-	discord, err := discordgo.New("Bot " + BotToken)
+	var Discord, err = discordgo.New("Bot " + BotToken)
 	CheckError(err)
-
-	discord.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
-		if m.Author.ID == s.State.User.ID {
-			return
-		}
-
-		msg := strings.ToLower(m.Content)
-		if strings.Contains(msg, "aide") {
-			s.ChannelMessageSend(m.ChannelID, "import (\"Cherche toi même\")")
-		}
-	})
-	discord.Identify.Intents = discordgo.IntentsAll
-	discord.Open()
-	defer discord.Close()
+	Discord.Identify.Intents = discordgo.IntentsAll
+	Discord.Open()
+	defer Discord.Close()
 	fmt.Println("connected!")
 	PreventBotOffline()
 }
@@ -35,6 +25,43 @@ func BotRun() {
 func GetEnv(key string) string {
 	CheckError(godotenv.Load("./.env"))
 	return os.Getenv(key)
+}
+
+func GetData(key string) string {
+	// define config file path
+	viper.AddConfigPath("./configs")
+	// define config file(s)
+	viper.SetConfigName("config")
+	// define config file to be read
+	viper.SetConfigType("json")
+	CheckError(viper.ReadInConfig())
+
+	return viper.GetString(key)
+}
+
+func IsAdmin(uid int) bool {
+	id := strconv.Itoa(uid)
+	admins := viper.GetStringSlice("Admins")
+
+	for _, v := range admins {
+		if id == v {
+			return true
+		}
+	}
+	return false
+}
+
+func IsAuthorizedUserRole(rid int) bool {
+	id := strconv.Itoa(rid)
+	roles := viper.GetStringSlice("Chatbot.AuthorizedUser")
+
+	for _, v := range roles {
+		if id == v {
+			return true
+		}
+	}
+
+	return false
 }
 
 // PreventBotOffline : Prevent bot from going offline one main.go is executed

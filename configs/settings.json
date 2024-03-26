@@ -1,0 +1,35 @@
+{
+  "Admins": [
+    "404659098919895045",
+    "ANOTHER DISCORD_ID_HERE"
+  ],
+
+  "Language": "fr",
+  "RichPresence": [
+    "QG des Madeleines",
+    "je peut pas j'ai piscine"
+  ],
+
+  "Chatbot": {
+    "AuthorizedUser" : [
+      "1212475000083193857"
+    ],
+    "InferenceBaseUrl": "https://api.naga.ac/v1",
+    "InferenceModel": "GPT3",
+    "Personality": "BASIC",
+    "InternetAccess": true,
+    "NsfwFilter": true,
+    "Blacklist_Word": [
+      "porn",
+      "naked",
+      "loli",
+      "pornography",
+      "XXX",
+      "sexe",
+      "erotic",
+      "fraise"
+    ]
+  },
+
+
+}
